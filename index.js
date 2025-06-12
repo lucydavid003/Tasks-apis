@@ -13,10 +13,11 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
-app.get("/tasks:/id", async (_req, res) => {
+app.get("/tasks/:id", async (req, res) => {
+    const {id} = req.params;
   try {
     const task = await Prisma.task.findUnique({
-      where: { id: req.param.id },
+      where: { id:id},
     });
     if (task) {
       return res.status(404).json({ massage: "unable to find task" });
@@ -40,7 +41,7 @@ app.post("/tasks", async (_req, res) => {
   }
 });
 
-app.put("/task/:id", async (req, res) => {
+app.put("/tasks/:id", async (req, res) => {
   const { title, description, isCompleted } = req.body;
   try {
     const updatedTask = await prisma.task.update({
