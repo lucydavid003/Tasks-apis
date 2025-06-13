@@ -4,8 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const app = express();
 
-
-app.use(express.json())
+app.use(express.json());
 
 app.get("/tasks", async (_req, res) => {
   try {
@@ -17,17 +16,16 @@ app.get("/tasks", async (_req, res) => {
 });
 
 app.get("/tasks/:id", async (req, res) => {
-    const {id} = req.params;
+  const { id } = req.params;
   try {
     const task = await prisma.task.findFirst({
-      where: { id:id},
+      where: { id: id },
     });
     if (task) {
       return res.status(200).json(task);
     } else {
-       return res.status(404).json({ message: "unable to find task" });
+      return res.status(404).json({ message: "unable to find task" });
     }
-
   } catch (e) {
     console.log("Error fetching task:", e);
     res.status(500).json({ message: " Server Error" });
@@ -35,12 +33,12 @@ app.get("/tasks/:id", async (req, res) => {
 });
 
 app.post("/tasks", async (req, res) => {
-  const { title, description,Iscompleted } = req.body;
+  const { title, description, Iscompleted } = req.body;
   try {
     console.log(req.body);
     const task = await prisma.task.create({
       data: { title, description, Iscompleted },
-    })
+    });
     res.status(201).json(task);
   } catch (e) {
     console.log("Error finding task:", e);
@@ -49,13 +47,13 @@ app.post("/tasks", async (req, res) => {
 });
 
 app.put("/tasks/:id", async (req, res) => {
-    console.log(req.body)
+  console.log(req.body);
   const { title, description, Iscompleted } = req.body;
 
   try {
     const updatedTask = await prisma.task.update({
       where: { id: req.params.id },
-      data: { title, description, Iscompleted},
+      data: { title, description, Iscompleted },
     });
     res.status(200).json(updatedTask);
   } catch (e) {
